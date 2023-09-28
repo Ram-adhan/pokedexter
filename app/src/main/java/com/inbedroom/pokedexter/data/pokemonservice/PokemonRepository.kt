@@ -14,7 +14,12 @@ class PokemonRepository(private val service: PokemonService) {
         private const val UNKNOWN_ERROR = "Unknown Error"
     }
 
-    suspend fun getAllPokemons(): ResponseResult<List<Pokemon>> {
+    private val allPokemon: MutableList<Pokemon> = mutableListOf()
+
+    suspend fun getAllPokemon(): ResponseResult<List<Pokemon>> {
+        if (allPokemon.isNotEmpty())
+            return ResponseResult.Success(allPokemon.toList())
+
         return try {
             val initData = service.getPokemonList()
             var count = 0
@@ -35,6 +40,10 @@ class PokemonRepository(private val service: PokemonService) {
                         }?.filterNot { pokemon -> pokemon.name.isBlank() } ?: listOf()
                     }
                     if (result.isNotEmpty()) {
+                        allPokemon.apply {
+                            clear()
+                            addAll(result)
+                        }
                         ResponseResult.Success(result)
                     } else {
                         ResponseResult.Error(message = "", code = ErrorCode.EMPTY_DATA)
