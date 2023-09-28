@@ -1,7 +1,9 @@
 package com.inbedroom.pokedexter.core.pokemonservice
 
 import androidx.core.net.toUri
+import com.inbedroom.pokedexter.core.ErrorCode
 import com.inbedroom.pokedexter.core.ResponseResult
+import com.inbedroom.pokedexter.core.pokemonservice.PokemonService.Companion.PAGE_SIZE
 import com.inbedroom.pokedexter.core.pokemonservice.entity.PaginationBase
 import com.inbedroom.pokedexter.core.pokemonservice.entity.Pokemon
 import com.inbedroom.pokedexter.core.pokemonservice.entity.PokemonDetail
@@ -9,8 +11,43 @@ import java.io.IOException
 
 class PokemonRepository(private val service: PokemonService) {
     companion object {
-        private const val PAGE_SIZE = 20
         private const val UNKNOWN_ERROR = "Unknown Error"
+    }
+
+    suspend fun getAllPokemons(): ResponseResult<List<Pokemon>> {
+        return try {
+            val initData = service.getPokemonList()
+            var count = 0
+            if (initData.isSuccessful && initData.body() != null) {
+                count = initData.body()!!.count ?: 0
+            }
+            if (count > 0) {
+                val allData = service.getPokemonList(limit = count)
+                if (allData.isSuccessful && allData.body() != null) {
+                    val result = allData.body()!!.let {
+                        it.results?.map { data ->
+                            val id = getIdFromLink(data.url)
+                            Pokemon(
+                                id = id,
+                                name = data.name ?: "",
+                                sprites = getDefaultSpriteLink(id)
+                            )
+                        }?.filterNot { pokemon -> pokemon.name.isBlank() } ?: listOf()
+                    }
+                    if (result.isNotEmpty()) {
+                        ResponseResult.Success(result)
+                    } else {
+                        ResponseResult.Error(message = "", code = ErrorCode.EMPTY_DATA)
+                    }
+                } else {
+                    ResponseResult.Error(message = "", code = ErrorCode.EMPTY_DATA)
+                }
+            } else {
+                ResponseResult.Error(message = "", code = ErrorCode.EMPTY_DATA)
+            }
+        } catch (e: IOException) {
+            ResponseResult.Error(message = e.localizedMessage ?: UNKNOWN_ERROR)
+        }
     }
 
     suspend fun getPokemonList(page: Int = 0): ResponseResult<PaginationBase<List<Pokemon>>> {
@@ -30,7 +67,7 @@ class PokemonRepository(private val service: PokemonService) {
                                 name = data.name ?: "",
                                 sprites = getDefaultSpriteLink(id)
                             )
-                        }?.filter { pokemon -> pokemon.name.isBlank() }
+                        }?.filterNot { pokemon -> pokemon.name.isBlank() }
                     )
                 }
                 ResponseResult.Success(result)
