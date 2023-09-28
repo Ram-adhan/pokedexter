@@ -1,12 +1,12 @@
-package com.inbedroom.pokedexter.core.pokemonservice
+package com.inbedroom.pokedexter.data.pokemonservice
 
 import androidx.core.net.toUri
 import com.inbedroom.pokedexter.core.ErrorCode
 import com.inbedroom.pokedexter.core.ResponseResult
-import com.inbedroom.pokedexter.core.pokemonservice.PokemonService.Companion.PAGE_SIZE
-import com.inbedroom.pokedexter.core.pokemonservice.entity.PaginationBase
-import com.inbedroom.pokedexter.core.pokemonservice.entity.Pokemon
-import com.inbedroom.pokedexter.core.pokemonservice.entity.PokemonDetail
+import com.inbedroom.pokedexter.data.pokemonservice.PokemonService.Companion.PAGE_SIZE
+import com.inbedroom.pokedexter.data.pokemonservice.entity.PaginationBase
+import com.inbedroom.pokedexter.data.pokemonservice.entity.Pokemon
+import com.inbedroom.pokedexter.data.pokemonservice.entity.PokemonDetail
 import java.io.IOException
 
 class PokemonRepository(private val service: PokemonService) {

@@ -1,8 +1,8 @@
-package com.inbedroom.pokedexter.core.pokemonservice
+package com.inbedroom.pokedexter.data.pokemonservice
 
-import com.inbedroom.pokedexter.core.pokemonservice.entity.BasicData
-import com.inbedroom.pokedexter.core.pokemonservice.entity.PaginationBase
-import com.inbedroom.pokedexter.core.pokemonservice.entity.PokemonDetail
+import com.inbedroom.pokedexter.data.pokemonservice.entity.BasicData
+import com.inbedroom.pokedexter.data.pokemonservice.entity.PaginationBase
+import com.inbedroom.pokedexter.data.pokemonservice.entity.PokemonDetail
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

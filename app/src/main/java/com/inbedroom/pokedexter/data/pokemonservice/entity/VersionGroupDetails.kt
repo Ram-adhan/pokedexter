@@ -1,4 +1,4 @@
-package com.inbedroom.pokedexter.core.pokemonservice.entity
+package com.inbedroom.pokedexter.data.pokemonservice.entity
 
 import com.google.gson.annotations.SerializedName
 
