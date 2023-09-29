@@ -1,5 +1,6 @@
 package com.inbedroom.pokedexter.features.pokemonlist
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -46,6 +47,30 @@ class ListPokemonActivity : AppCompatActivity(), LoadingHandler by LoadingHandle
         binding.etSearch.doAfterTextChanged {
             viewModel.getPokemonList(it.toString())
         }
+
+        binding.toggleChange.setOnClickListener {
+            if (layoutManager.spanCount == 3) {
+                val animator = ValueAnimator.ofFloat(0.3f, 0.5f)
+                animator.duration = 700
+                startToggleAnimation(animator)
+                layoutManager.spanCount = 1
+                adapter.notifyItemRangeChanged(0, adapter.currentList.size)
+            } else {
+                val animator = ValueAnimator.ofFloat(0.5f, 0f)
+                animator.duration = 1200
+                startToggleAnimation(animator)
+                layoutManager.spanCount = 3
+                binding.rvList.requestLayout()
+                adapter.notifyItemRangeChanged(0, adapter.currentList.size)
+            }
+        }
+    }
+
+    private fun startToggleAnimation(animator: ValueAnimator) {
+        animator.addUpdateListener {
+            binding.toggleChange.progress = it.animatedValue as Float
+        }
+        animator.start()
     }
 
     private fun stateHandler(state: PokemonListUiState) {
