@@ -13,9 +13,9 @@ interface PokemonService {
         const val PAGE_SIZE = 20
     }
 
-    @GET("api/v2/pokemon/")
+    @GET("pokemon/")
     suspend fun getPokemonList(@Query("offset") offset: Int? = null, @Query("limit") limit: Int = PAGE_SIZE): Response<PaginationBase<List<BasicData>>>
 
-    @GET("api/v2/pokemon/{id}")
+    @GET("pokemon/{id}")
     suspend fun getPokemonDetail(@Path("id") id: Int): Response<PokemonDetail>
 }
