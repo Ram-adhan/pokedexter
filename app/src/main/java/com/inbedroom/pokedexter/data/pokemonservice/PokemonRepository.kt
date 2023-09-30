@@ -98,7 +98,9 @@ class PokemonRepository(private val service: PokemonService) {
         return try {
             val response = service.getPokemonDetail(id)
             if (response.isSuccessful && response.body() != null) {
-                ResponseResult.Success(data = response.body()!!)
+                ResponseResult.Success(data = response.body()!!.apply { artwork =
+                    name?.let { getArtworkLink(it) }
+                })
             } else {
                 ResponseResult.Error(message = UNKNOWN_ERROR)
             }
@@ -106,4 +108,6 @@ class PokemonRepository(private val service: PokemonService) {
             ResponseResult.Error(message = e.localizedMessage ?: UNKNOWN_ERROR)
         }
     }
+
+    private fun getArtworkLink(pokemonName: String) = """https://img.pokemondb.net/artwork/large/$pokemonName.jpg"""
 }

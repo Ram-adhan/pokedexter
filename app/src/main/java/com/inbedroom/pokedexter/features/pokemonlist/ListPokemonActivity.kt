@@ -10,9 +10,11 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.inbedroom.pokedexter.databinding.ActivityListPokemonBinding
+import com.inbedroom.pokedexter.features.pokemondetail.PokemonDetailActivity
 import com.inbedroom.pokedexter.utils.LoadingHandler
 import com.inbedroom.pokedexter.utils.LoadingHandlerImpl
 import com.inbedroom.pokedexter.utils.adapter.pokemonlist.PokemonListAdapter
+import com.inbedroom.pokedexter.utils.adapter.pokemonlist.PokemonModel
 import kotlinx.coroutines.launch
 
 class ListPokemonActivity : AppCompatActivity(), LoadingHandler by LoadingHandlerImpl() {
@@ -48,6 +50,8 @@ class ListPokemonActivity : AppCompatActivity(), LoadingHandler by LoadingHandle
             viewModel.getPokemonList(it.toString())
         }
 
+        adapter.onItemClickListener = this::onPokemonItemClick
+
         binding.toggleChange.setOnClickListener {
             if (layoutManager.spanCount == 3) {
                 val animator = ValueAnimator.ofFloat(0.3f, 0.5f)
@@ -71,6 +75,15 @@ class ListPokemonActivity : AppCompatActivity(), LoadingHandler by LoadingHandle
             binding.toggleChange.progress = it.animatedValue as Float
         }
         animator.start()
+    }
+
+    private fun onPokemonItemClick(pokemonModel: PokemonModel) {
+        startActivity(
+            PokemonDetailActivity.newIntent(
+                context = this,
+                id = pokemonModel.id
+            )
+        )
     }
 
     private fun stateHandler(state: PokemonListUiState) {

@@ -1,8 +1,8 @@
 package com.inbedroom.pokedexter.core
 
-import androidx.viewbinding.BuildConfig
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.inbedroom.pokedexter.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
