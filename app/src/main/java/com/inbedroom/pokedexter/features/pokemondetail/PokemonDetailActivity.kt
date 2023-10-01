@@ -2,6 +2,8 @@ package com.inbedroom.pokedexter.features.pokemondetail
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +14,12 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.transition.Transition
 import com.inbedroom.pokedexter.R
 import com.inbedroom.pokedexter.databinding.ActivityPokemonDetailBinding
 import com.inbedroom.pokedexter.utils.LoadingHandler
@@ -51,8 +59,29 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
                     when (state) {
                         is PokemonDetailUiState.SuccessGetDetail -> {
                             Glide.with(this@PokemonDetailActivity)
+                                .asBitmap()
                                 .load(state.data.artwork)
-                                .placeholder(R.drawable.pokeball_bw)
+                                .addListener(object : RequestListener<Bitmap> {
+                                    override fun onLoadFailed(
+                                        e: GlideException?,
+                                        model: Any?,
+                                        target: Target<Bitmap>?,
+                                        isFirstResource: Boolean
+                                    ): Boolean {
+                                        return false
+                                    }
+
+                                    override fun onResourceReady(
+                                        resource: Bitmap?,
+                                        model: Any?,
+                                        target: Target<Bitmap>?,
+                                        dataSource: DataSource?,
+                                        isFirstResource: Boolean
+                                    ): Boolean {
+                                        binding.imagePlaceholder.isVisible = false
+                                        return false
+                                    }
+                                })
                                 .into(binding.ivArtwork)
 
                             binding.tvPokemonName.text = state.data.name.replaceFirstChar { it.uppercase() }

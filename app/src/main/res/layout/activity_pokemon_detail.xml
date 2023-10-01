@@ -6,11 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".features.pokemondetail.PokemonDetailActivity">
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="catch pokemon"
+        tools:ignore="HardcodedText"
+        app:backgroundTint="@color/white"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_gravity="end|top"/>
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:fillViewport="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,6 +36,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/imagePlaceholder"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleX="0.5"
+                android:scaleY="0.5"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_fileName="pokeball_loading_dot.lottie"
+                app:layout_constraintTop_toTopOf="@id/ivArtwork"
+                app:layout_constraintBottom_toBottomOf="@id/ivArtwork"
+                app:layout_constraintStart_toStartOf="@id/ivArtwork"
+                app:layout_constraintEnd_toEndOf="@id/ivArtwork" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide"
@@ -61,6 +85,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:overScrollMode="never"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tvDataTitle"
                 app:layout_constraintTop_toBottomOf="@id/tvDataTitle" />
