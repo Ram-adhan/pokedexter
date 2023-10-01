@@ -3,11 +3,11 @@ package com.inbedroom.pokedexter.features.pokemondetail
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
@@ -47,6 +47,7 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
         binding = ActivityPokemonDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         initializeLoadingDialog(this)
 
         observeState()
@@ -60,6 +61,10 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressedDispatcher.onBackPressed()
+        return super.onSupportNavigateUp()
+    }
     private fun observeState() {
         lifecycleScope.launch {
             viewModel.uiState
