@@ -1,6 +1,7 @@
 package com.inbedroom.pokedexter
 
 import android.app.Application
+import com.inbedroom.pokedexter.core.DatabaseClient
 import com.inbedroom.pokedexter.utils.AppModule
 
 class BaseApplication: Application() {
@@ -10,5 +11,6 @@ class BaseApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         _repositoryModule = AppModule()
+        DatabaseClient.initialize(this)
     }
 }

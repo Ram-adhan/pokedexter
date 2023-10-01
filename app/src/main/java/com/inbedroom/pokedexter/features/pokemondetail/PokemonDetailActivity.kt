@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,6 +18,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.inbedroom.pokedexter.R
 import com.inbedroom.pokedexter.databinding.ActivityPokemonDetailBinding
 import com.inbedroom.pokedexter.utils.LoadingHandler
 import com.inbedroom.pokedexter.utils.LoadingHandlerImpl
@@ -50,7 +52,7 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
         observeState()
 
         binding.btnCatch.setOnClickListener {
-            binding.sparkAnimation.playAnimation()
+            viewModel.catchOrReleasePokemon()
         }
 
         if (id > 0) {
@@ -92,7 +94,8 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
                                 })
                                 .into(binding.ivArtwork)
 
-                            binding.tvPokemonName.text = state.data.name.replaceFirstChar { it.uppercase() }
+                            binding.tvPokemonName.text =
+                                state.data.name.replaceFirstChar { it.uppercase() }
 
                             binding.rvDexData.apply {
                                 adapter = PokedexDetailsAdapter(state.data.details.toMutableList())
@@ -104,15 +107,48 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
                             Log.d("PokemonDetail", "evolutionChain: ${state.data}")
                             binding.rvEvolution.apply {
                                 adapter = EvolutionAdapter(state.data)
-                                layoutManager = LinearLayoutManager(this@PokemonDetailActivity, LinearLayoutManager.HORIZONTAL, false)
+                                layoutManager = LinearLayoutManager(
+                                    this@PokemonDetailActivity,
+                                    LinearLayoutManager.HORIZONTAL,
+                                    false
+                                )
                             }
+                        }
+                        is PokemonDetailUiState.PokemonAlreadyCaught -> {
+                            binding.ivPokeball.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    this@PokemonDetailActivity,
+                                    R.drawable.colored_pokeball
+                                )
+                            )
+                        }
+                        is PokemonDetailUiState.SuccessCatchPokemon -> {
+                            binding.sparkAnimation.playAnimation()
+                            binding.ivPokeball.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    this@PokemonDetailActivity,
+                                    R.drawable.colored_pokeball
+                                )
+                            )
+                        }
+                        is PokemonDetailUiState.PokemonReleased -> {
+                            binding.ivPokeball.setImageDrawable(
+                                ContextCompat.getDrawable(
+                                    this@PokemonDetailActivity,
+                                    R.drawable.bw_pokeball
+                                )
+                            )
                         }
                         is PokemonDetailUiState.NoEvolutionChain -> {
                             binding.tvNoEvolution.isVisible = true
                         }
                         is PokemonDetailUiState.Error -> {
                             Toast
-                                .makeText(this@PokemonDetailActivity, state.message, Toast.LENGTH_SHORT)
+                                .makeText(
+                                    this@PokemonDetailActivity,
+                                    state.message,
+                                    Toast.LENGTH_SHORT
+                                )
                                 .show()
                         }
                         else -> {
