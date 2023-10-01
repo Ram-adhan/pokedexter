@@ -4,17 +4,18 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.inbedroom.pokedexter.R
 import com.inbedroom.pokedexter.databinding.ActivityPokemonDetailBinding
 import com.inbedroom.pokedexter.utils.LoadingHandler
 import com.inbedroom.pokedexter.utils.LoadingHandlerImpl
 import com.inbedroom.pokedexter.utils.adapter.dexdetail.PokedexDetailsAdapter
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHandlerImpl() {
@@ -49,14 +50,20 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
                         is PokemonDetailUiState.SuccessGetDetail -> {
                             Glide.with(this@PokemonDetailActivity)
                                 .load(state.data.artwork)
+                                .placeholder(R.drawable.pokeball_bw)
                                 .into(binding.ivArtwork)
+
+                            binding.tvPokemonName.text = state.data.name.replaceFirstChar { it.uppercase() }
 
                             binding.rvDexData.apply {
                                 adapter = PokedexDetailsAdapter(state.data.details.toMutableList())
                                 layoutManager = LinearLayoutManager(this@PokemonDetailActivity)
                             }
                         }
-                        is PokemonDetailUiState.ErrorGetDetail -> {
+                        is PokemonDetailUiState.SuccessGetEvolutionChain -> {
+                            Log.d("PokemonDetail", "evolutionChain: ${state.data}")
+                        }
+                        is PokemonDetailUiState.Error -> {
                             Toast
                                 .makeText(this@PokemonDetailActivity, state.message, Toast.LENGTH_SHORT)
                                 .show()
@@ -69,7 +76,7 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
                 }
         }
         if (id > 0) {
-            viewModel.getDetail(id)
+            viewModel.getDetails(id)
         }
     }
 }

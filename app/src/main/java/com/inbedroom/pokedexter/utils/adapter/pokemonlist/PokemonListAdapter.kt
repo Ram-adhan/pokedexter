@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.color.utilities.CorePalette
+import com.inbedroom.pokedexter.data.pokemonservice.PokemonRepository
 import com.inbedroom.pokedexter.databinding.ItemPokemonBinding
 import com.inbedroom.pokedexter.databinding.ItemPokemonGridBinding
 import kotlin.math.log
@@ -92,7 +93,7 @@ class PokemonListAdapter(
                 })
 
             binding.tvName.text = item.name
-            binding.tvPokedexEntry.text = item.id.toString()
+            binding.tvPokedexEntry.text = item.id.toString().padStart(PokemonRepository.maxPad, '0')
 
             binding.root.setOnClickListener { onItemClickListener?.invoke(item) }
         }

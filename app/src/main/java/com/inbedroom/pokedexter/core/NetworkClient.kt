@@ -3,6 +3,7 @@ package com.inbedroom.pokedexter.core
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.inbedroom.pokedexter.BuildConfig
+import com.inbedroom.pokedexter.data.pokemonservice.PokemonRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -35,16 +36,11 @@ class NetworkClient {
                 if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
         }
 
-        fun <T : Any> processError(response: Response<T>): Throwable {
-            val body = response.errorBody()?.string()
-            return if (body.isNullOrBlank()) {
-                Throwable("Unknown Error")
+        fun <T : Any> getResultOrFailure(response: Response<T>): ResponseResult<T> {
+            return if (response.isSuccessful && response.body() != null) {
+                ResponseResult.Success(data = response.body()!!)
             } else {
-                val typeToken = object : TypeToken<Map<String, String>>() {}.type
-                val mapper = Gson().fromJson<Map<String, String>>(body, typeToken)
-                mapper.keys.firstOrNull()?.let { key ->
-                    Throwable("$key : ${mapper[key]}")
-                } ?: Throwable("Unknown Error")
+                ResponseResult.Error(message = response.errorBody()?.string().orEmpty())
             }
         }
     }

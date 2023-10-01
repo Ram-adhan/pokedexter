@@ -1,8 +1,6 @@
 package com.inbedroom.pokedexter.data.pokemonservice
 
-import com.inbedroom.pokedexter.data.pokemonservice.entity.BasicData
-import com.inbedroom.pokedexter.data.pokemonservice.entity.PaginationBase
-import com.inbedroom.pokedexter.data.pokemonservice.entity.PokemonDetail
+import com.inbedroom.pokedexter.data.pokemonservice.entity.*
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -18,4 +16,10 @@ interface PokemonService {
 
     @GET("pokemon/{id}")
     suspend fun getPokemonDetail(@Path("id") id: Int): Response<PokemonDetail>
+
+    @GET("pokemon-species/{id}")
+    suspend fun getPokemonSpecies(@Path("id") id: Int): Response<PokemonSpecies>
+
+    @GET("evolution-chain/{id}")
+    suspend fun getEvolutionChain(@Path("id") resourceId: Int): Response<EvolutionChain>
 }

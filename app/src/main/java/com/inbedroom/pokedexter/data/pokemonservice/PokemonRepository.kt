@@ -2,16 +2,19 @@ package com.inbedroom.pokedexter.data.pokemonservice
 
 import androidx.core.net.toUri
 import com.inbedroom.pokedexter.core.ErrorCode
+import com.inbedroom.pokedexter.core.NetworkClient
 import com.inbedroom.pokedexter.core.ResponseResult
 import com.inbedroom.pokedexter.data.pokemonservice.PokemonService.Companion.PAGE_SIZE
-import com.inbedroom.pokedexter.data.pokemonservice.entity.PaginationBase
-import com.inbedroom.pokedexter.data.pokemonservice.entity.Pokemon
-import com.inbedroom.pokedexter.data.pokemonservice.entity.PokemonDetail
+import com.inbedroom.pokedexter.data.pokemonservice.entity.*
 import java.io.IOException
 
 class PokemonRepository(private val service: PokemonService) {
     companion object {
         private const val UNKNOWN_ERROR = "Unknown Error"
+        var maxPad = 4
+        private set
+
+        fun getDefaultSpriteLink(id: Int): String = """https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"""
     }
 
     private val allPokemon: MutableList<Pokemon> = mutableListOf()
@@ -27,6 +30,7 @@ class PokemonRepository(private val service: PokemonService) {
                 count = initData.body()!!.count ?: 0
             }
             if (count > 0) {
+                maxPad = count.toString().count()
                 val allData = service.getPokemonList(limit = count)
                 if (allData.isSuccessful && allData.body() != null) {
                     val result = allData.body()!!.let {
@@ -92,8 +96,6 @@ class PokemonRepository(private val service: PokemonService) {
         return link?.toUri()?.pathSegments?.lastOrNull()?.toIntOrNull() ?: 0
     }
 
-    private fun getDefaultSpriteLink(id: Int): String = """https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"""
-
     suspend fun getPokemonDetail(id: Int): ResponseResult<PokemonDetail> {
         return try {
             val response = service.getPokemonDetail(id)
@@ -110,4 +112,20 @@ class PokemonRepository(private val service: PokemonService) {
     }
 
     private fun getArtworkLink(pokemonName: String) = """https://img.pokemondb.net/artwork/large/$pokemonName.jpg"""
+
+    suspend fun getPokemonSpecies(pokemonId: Int): ResponseResult<PokemonSpecies> {
+        return try {
+            NetworkClient.getResultOrFailure(service.getPokemonSpecies(pokemonId))
+        } catch (e: IOException) {
+            ResponseResult.Error(message = e.localizedMessage ?: UNKNOWN_ERROR)
+        }
+    }
+
+    suspend fun getEvolutionChain(resourceId: Int): ResponseResult<EvolutionChain> {
+        return try {
+            NetworkClient.getResultOrFailure(service.getEvolutionChain(resourceId))
+        } catch (e: IOException) {
+            ResponseResult.Error(message = e.localizedMessage ?: UNKNOWN_ERROR)
+        }
+    }
 }

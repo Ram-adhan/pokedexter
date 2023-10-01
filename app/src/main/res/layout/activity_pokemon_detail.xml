@@ -20,20 +20,41 @@
             <ImageView
                 android:id="@+id/ivArtwork"
                 android:layout_width="200dp"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:scaleType="fitCenter"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/guide"/>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.25" />
+
+            <TextView
+                android:id="@+id/tvPokemonName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="PokedexData"
+                android:gravity="center"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivArtwork" />
 
             <TextView
                 android:id="@+id/tvDataTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="PokedexData"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivArtwork" />
+                app:layout_constraintTop_toBottomOf="@id/tvPokemonName" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvDexData"
@@ -43,36 +64,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tvDataTitle"
                 app:layout_constraintTop_toBottomOf="@id/tvDataTitle" />
-
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/detailBarrier"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="bottom"
-                app:constraint_referenced_ids="ivArtwork, rvDexData" />
-
-            <TextView
-                android:id="@+id/tvTitleTypeAdvantage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Type Advantage"
-                app:layout_constraintTop_toBottomOf="@id/detailBarrier" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTypeAdvantage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/tvTitleTypeAdvantage" />
-
             <TextView
                 android:id="@+id/tvTitleEvolutionChain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Evolution"
-                app:layout_constraintTop_toBottomOf="@id/rvTypeAdvantage" />
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/rvDexData" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvEvolution"

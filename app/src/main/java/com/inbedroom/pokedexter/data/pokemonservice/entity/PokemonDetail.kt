@@ -13,7 +13,6 @@ data class PokemonDetail(
     @SerializedName("moves") val moves: ArrayList<Moves> = arrayListOf(),
     @SerializedName("name") val name: String? = null,
     @SerializedName("order") val order: Int? = null,
-    @SerializedName("past_types") val pastTypes: ArrayList<String> = arrayListOf(),
     @SerializedName("species") val species: BasicData? = BasicData(),
     @SerializedName("sprites") val sprites: SpriteData? = SpriteData(),
     @SerializedName("stats") val stats: ArrayList<Stats> = arrayListOf(),

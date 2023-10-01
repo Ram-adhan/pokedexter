@@ -8,7 +8,7 @@ enum class PokemonType(val shortCode: String, @ColorInt val bgColor: Int, @Color
     FIRE("fir", Color.parseColor("#fe4422"), Color.parseColor("#d2371b")),
     WATER("wat", Color.parseColor("#3399fe"), Color.parseColor("#3b84cf")),
     GRASS("gra", Color.parseColor("#76cc55"), Color.parseColor("#5ea444")),
-    ELECTRIC("ele", Color.parseColor("#ffffff"), Color.parseColor("#cca329")),
+    ELECTRIC("ele", Color.parseColor("#ffcc33"), Color.parseColor("#cca329")),
     ICE("ice", Color.parseColor("#65ccff"), Color.parseColor("#51a7cf")),
     FIGHTING("fig", Color.parseColor("#ba5544"), Color.parseColor("#954436")),
     POISON("poi", Color.parseColor("#ab579a"), Color.parseColor("#8a467c")),
