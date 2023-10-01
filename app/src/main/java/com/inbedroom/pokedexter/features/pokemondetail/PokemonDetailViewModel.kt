@@ -43,12 +43,8 @@ class PokemonDetailViewModel(
     fun getDetails(id: Int) {
         _uiState.tryEmit(PokemonDetailUiState.Loading)
         viewModelScope.launch(ioDispatcher) {
+            getPokemonEvolutionChain(id)
             getPokemonDetail(id)
-            withContext(Dispatchers.Default) {
-                getPokemonEvolutionChain(
-                    id
-                )
-            }
         }
     }
 

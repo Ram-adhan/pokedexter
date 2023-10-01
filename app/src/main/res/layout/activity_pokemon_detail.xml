@@ -22,10 +22,10 @@
                 android:layout_width="200dp"
                 android:layout_height="0dp"
                 android:scaleType="fitCenter"
+                app:layout_constraintBottom_toBottomOf="@id/guide"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="@id/guide"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.Guideline
                 android:id="@+id/guide"
@@ -38,13 +38,13 @@
                 android:id="@+id/tvPokemonName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:text="PokedexData"
                 android:gravity="center"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivArtwork" />
+                app:layout_constraintTop_toBottomOf="@id/ivArtwork"
+                tools:text="PokedexData" />
 
             <TextView
                 android:id="@+id/tvDataTitle"
@@ -64,6 +64,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@id/tvDataTitle"
                 app:layout_constraintTop_toBottomOf="@id/tvDataTitle" />
+
             <TextView
                 android:id="@+id/tvTitleEvolutionChain"
                 android:layout_width="match_parent"
@@ -75,9 +76,22 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvEvolution"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvTitleEvolutionChain" />
+
+            <TextView
+                android:id="@+id/tvNoEvolution"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="This pokemon doesn\'t evolve"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/tvTitleEvolutionChain" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

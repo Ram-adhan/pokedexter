@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import com.inbedroom.pokedexter.databinding.ActivityPokemonDetailBinding
 import com.inbedroom.pokedexter.utils.LoadingHandler
 import com.inbedroom.pokedexter.utils.LoadingHandlerImpl
 import com.inbedroom.pokedexter.utils.adapter.dexdetail.PokedexDetailsAdapter
+import com.inbedroom.pokedexter.utils.adapter.evolution.EvolutionAdapter
 import kotlinx.coroutines.launch
 
 class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHandlerImpl() {
@@ -61,7 +63,15 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
                             }
                         }
                         is PokemonDetailUiState.SuccessGetEvolutionChain -> {
+                            binding.tvNoEvolution.isVisible = false
                             Log.d("PokemonDetail", "evolutionChain: ${state.data}")
+                            binding.rvEvolution.apply {
+                                adapter = EvolutionAdapter(state.data)
+                                layoutManager = LinearLayoutManager(this@PokemonDetailActivity, LinearLayoutManager.HORIZONTAL, false)
+                            }
+                        }
+                        is PokemonDetailUiState.NoEvolutionChain -> {
+                            binding.tvNoEvolution.isVisible = true
                         }
                         is PokemonDetailUiState.Error -> {
                             Toast
