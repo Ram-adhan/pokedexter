@@ -3,7 +3,6 @@ package com.inbedroom.pokedexter.features.pokemondetail
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,10 +16,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
-import com.bumptech.glide.request.transition.Transition
-import com.inbedroom.pokedexter.R
 import com.inbedroom.pokedexter.databinding.ActivityPokemonDetailBinding
 import com.inbedroom.pokedexter.utils.LoadingHandler
 import com.inbedroom.pokedexter.utils.LoadingHandlerImpl
@@ -51,6 +47,18 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
 
         initializeLoadingDialog(this)
 
+        observeState()
+
+        binding.btnCatch.setOnClickListener {
+            binding.sparkAnimation.playAnimation()
+        }
+
+        if (id > 0) {
+            viewModel.getDetails(id)
+        }
+    }
+
+    private fun observeState() {
         lifecycleScope.launch {
             viewModel.uiState
                 .flowWithLifecycle(lifecycle)
@@ -113,9 +121,6 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
                     }
 
                 }
-        }
-        if (id > 0) {
-            viewModel.getDetails(id)
         }
     }
 }
