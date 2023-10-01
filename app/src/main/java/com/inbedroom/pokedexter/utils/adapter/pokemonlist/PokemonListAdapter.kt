@@ -1,12 +1,12 @@
 package com.inbedroom.pokedexter.utils.adapter.pokemonlist
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -14,11 +14,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.google.android.material.color.utilities.CorePalette
 import com.inbedroom.pokedexter.data.pokemonservice.PokemonRepository
 import com.inbedroom.pokedexter.databinding.ItemPokemonBinding
 import com.inbedroom.pokedexter.databinding.ItemPokemonGridBinding
-import kotlin.math.log
 
 class PokemonListAdapter(
     private val layoutManager: GridLayoutManager? = null,
@@ -46,13 +44,14 @@ class PokemonListAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (layoutManager?.spanCount == 3) GRID_ITEM else LINEAR_ITEM
+        return if (layoutManager?.spanCount == 1) LINEAR_ITEM else GRID_ITEM
     }
 
     abstract class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     inner class GridItemHolder(private val binding: ItemPokemonGridBinding) :
         ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(item: PokemonModel) {
             binding.root.setOnClickListener(null)
 
@@ -93,7 +92,9 @@ class PokemonListAdapter(
                 })
 
             binding.tvName.text = item.name
-            binding.tvPokedexEntry.text = item.id.toString().padStart(PokemonRepository.maxPad, '0')
+            binding.tvPokedexEntry.text = "#" + item.id.toString().padStart(PokemonRepository.maxPad, '0')
+            binding.tvNickName.isVisible = item.nickname.isNotEmpty()
+            binding.tvNickName.text = item.nickname
 
             binding.root.setOnClickListener { onItemClickListener?.invoke(item) }
         }
@@ -101,13 +102,21 @@ class PokemonListAdapter(
 
     inner class LinearItemHolder(private val binding: ItemPokemonBinding) :
         ViewHolder(binding.root) {
+        @SuppressLint("SetTextI18n")
         fun bind(item: PokemonModel) {
             binding.root.setOnClickListener(null)
 
             Glide.with(binding.ivSprite).load(item.sprite).into(binding.ivSprite)
 
-            binding.tvName.text = item.name
-            binding.tvPokedexEntry.text = item.id.toString()
+            val name = if (item.nickname.isNotEmpty()) {
+                binding.edit.isVisible = true
+                "${item.name}/${item.nickname}"
+            } else {
+                binding.edit.isVisible = false
+                item.name
+            }
+            binding.tvName.text = name
+            binding.tvPokedexEntry.text = "#" + item.id.toString().padStart(PokemonRepository.maxPad, '0')
 
             binding.root.setOnClickListener { onItemClickListener?.invoke(item) }
         }

@@ -14,11 +14,11 @@
 
         <ImageView
             android:id="@+id/ivSprite"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/tvPokedexEntry" />
 
         <TextView
             android:id="@+id/tvName"
@@ -30,6 +30,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivSprite"
             tools:text="Bulbasaur" />
+
+        <TextView
+            android:id="@+id/tvNickName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvName"
+            tools:text="Bulbasaur"
+            android:visibility="gone"
+            app:drawableEndCompat="@drawable/baseline_edit_24" />
 
         <TextView
             android:id="@+id/tvPokedexEntry"

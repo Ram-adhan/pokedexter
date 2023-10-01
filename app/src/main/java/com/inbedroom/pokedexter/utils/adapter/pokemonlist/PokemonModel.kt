@@ -6,6 +6,7 @@ data class PokemonModel(
     val name: String,
     val id: Int,
     val sprite: String,
+    val nickname: String = ""
 )
 
 class ModelDiffUtil: DiffUtil.ItemCallback<PokemonModel>() {
