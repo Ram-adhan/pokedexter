@@ -15,9 +15,8 @@ class PokemonRepository(private val service: PokemonService) {
         private set
 
         fun getDefaultSpriteLink(id: Int): String = """https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/$id.png"""
+        private val allPokemon: MutableList<Pokemon> = mutableListOf()
     }
-
-    private val allPokemon: MutableList<Pokemon> = mutableListOf()
 
     suspend fun getAllPokemon(): ResponseResult<List<Pokemon>> {
         if (allPokemon.isNotEmpty())

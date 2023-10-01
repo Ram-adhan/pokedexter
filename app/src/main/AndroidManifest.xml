@@ -15,17 +15,20 @@
         android:theme="@style/Theme.Pokedexter"
         tools:targetApi="31">
         <activity
-            android:name=".features.pokemondetail.PokemonDetailActivity"
-            android:exported="false" />
-        <activity
-            android:name=".features.pokemonlist.ListPokemonActivity"
-            android:exported="true">
+            android:name=".features.splash.SplashActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".features.pokemondetail.PokemonDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".features.pokemonlist.ListPokemonActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
