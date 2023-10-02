@@ -42,31 +42,6 @@ class PokemonStorageViewModel(
         initialValue = PokemonListUiState.Loading
     )
 
-    fun getPokemonList(searchKeyWord: String = "") {
-        viewModelScope.launch(ioDispatcher) {
-            when (val result = pokemonRepository.getAllPokemon()) {
-                is ResponseResult.Success -> {
-                    val data = if (searchKeyWord.isNotEmpty()) {
-                        result.data.filter { it.name.contains(searchKeyWord) }
-                    } else {
-                        result.data
-                    }.map {
-                        PokemonModel(
-                            name = it.name,
-                            id = it.id,
-                            sprite = it.sprites
-                        )
-                    }
-
-                    _uiState.emit(PokemonListUiState.SuccessGetPokemonList(data = data))
-                }
-                is ResponseResult.Error -> {
-                    _uiState.emit(PokemonListUiState.ErrorGetPokemonList(result.code))
-                }
-            }
-        }
-    }
-
     fun getCaughtPokemon(searchKeyWord: String) {
         viewModelScope.launch(ioDispatcher) {
             val result = pokemonDatabase.caughtPokemonDao().getAllCaughtPokemon().map {
@@ -74,7 +49,8 @@ class PokemonStorageViewModel(
                     name = it.pokemonName,
                     id = it.id,
                     sprite = PokemonRepository.getDefaultSpriteLink(it.id),
-                    nickname = it.givenName.ifBlank { it.pokemonName }
+                    nickname = it.givenName.ifBlank { it.pokemonName },
+                    showEdit = true
                 )
             }
             _uiState.emit(PokemonListUiState.SuccessGetPokemonList(result))

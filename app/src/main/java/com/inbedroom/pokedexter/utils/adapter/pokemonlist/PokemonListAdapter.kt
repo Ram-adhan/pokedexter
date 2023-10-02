@@ -95,6 +95,11 @@ class PokemonListAdapter(
             binding.tvPokedexEntry.text = "#" + item.id.toString().padStart(PokemonRepository.maxPad, '0')
             binding.tvNickName.isVisible = item.nickname.isNotEmpty()
             binding.tvNickName.text = item.nickname
+            binding.edit.isVisible = item.showEdit
+            if (item.showEdit) {
+                binding.tvNickName.text = item.name
+                binding.tvName.text = item.nickname
+            }
 
             binding.root.setOnClickListener { onItemClickListener?.invoke(item) }
         }
