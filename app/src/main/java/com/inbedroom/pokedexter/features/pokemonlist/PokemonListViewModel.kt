@@ -13,7 +13,6 @@ import com.inbedroom.pokedexter.data.pokemonservice.PokemonRepository
 import com.inbedroom.pokedexter.utils.adapter.pokemonlist.PokemonModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +28,7 @@ class PokemonListViewModel(
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val repository =
-                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as BaseApplication).repositoryModule
+                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as BaseApplication).pokemonRepository
                 PokemonListViewModel(repository, DatabaseClient.getDB())
             }
         }

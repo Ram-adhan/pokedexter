@@ -3,7 +3,6 @@ package com.inbedroom.pokedexter.features.splash
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import androidx.lifecycle.lifecycleScope
 import com.inbedroom.pokedexter.BaseApplication
 import com.inbedroom.pokedexter.databinding.ActivitySplashBinding
@@ -20,7 +19,7 @@ class SplashActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         lifecycleScope.launch(Dispatchers.IO) {
-            (application as BaseApplication).repositoryModule.getAllPokemon()
+            (application as BaseApplication).pokemonRepository.getAllPokemon()
             delay(2000)
             withContext(Dispatchers.Default) {
                 startActivity(

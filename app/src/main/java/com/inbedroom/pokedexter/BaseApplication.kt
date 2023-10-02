@@ -6,7 +6,8 @@ import com.inbedroom.pokedexter.utils.AppModule
 
 class BaseApplication: Application() {
     private lateinit var _repositoryModule: AppModule
-    val repositoryModule get() = _repositoryModule.getPokemonRepository()
+    val pokemonRepository get() = _repositoryModule.getPokemonRepository()
+    val catchRepository get() = _repositoryModule.getCatchRepository()
 
     override fun onCreate() {
         super.onCreate()
