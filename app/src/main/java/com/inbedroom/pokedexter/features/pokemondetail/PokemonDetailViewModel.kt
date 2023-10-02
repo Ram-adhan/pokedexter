@@ -84,7 +84,7 @@ class PokemonDetailViewModel(
 
     private suspend fun releasePokemon(caughtPokemon: CaughtPokemon) {
         _uiState.emit(PokemonDetailUiState.Loading)
-        when(catchRepository.releasePokemon()) {
+        when(val result = catchRepository.releasePokemon()) {
             is ResponseResult.Success -> {
                 val deleteResult = pokemonDatabase.caughtPokemonDao().deletePokemon(caughtPokemon)
                 if (deleteResult > 0) {
@@ -95,7 +95,7 @@ class PokemonDetailViewModel(
                 }
             }
             is ResponseResult.Error -> {
-                _uiState.emit(PokemonDetailUiState.Error("Failed to Release Pokemon"))
+                _uiState.emit(PokemonDetailUiState.Error(result.message))
             }
         }
     }
@@ -193,7 +193,7 @@ class PokemonDetailViewModel(
         val result = pokemonDatabase.caughtPokemonDao().getCaughtPokemon(id)
         if (result.isNotEmpty()) {
             caughtPokemon = result.first()
-            _uiState.emit(PokemonDetailUiState.PokemonAlreadyCaught)
+            _uiState.emit(PokemonDetailUiState.PokemonAlreadyCaught(caughtPokemon!!.givenName.ifBlank { caughtPokemon!!.pokemonName } ))
         } else {
             caughtPokemon = null
         }
@@ -205,7 +205,7 @@ class PokemonDetailViewModel(
                 pokemonDatabase.caughtPokemonDao().update(
                     it.copy(givenName = newName)
                 )
-                _uiState.emit(PokemonDetailUiState.SuccessRenamePokemon)
+                _uiState.emit(PokemonDetailUiState.SuccessRenamePokemon(newName))
             }
         }
     }

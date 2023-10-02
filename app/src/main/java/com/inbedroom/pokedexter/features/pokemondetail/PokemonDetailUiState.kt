@@ -9,9 +9,9 @@ sealed interface PokemonDetailUiState {
     data class Error(val message: String): PokemonDetailUiState
     data class SuccessGetEvolutionChain(val data: List<EvolutionData>): PokemonDetailUiState
     object NoEvolutionChain: PokemonDetailUiState
-    object PokemonAlreadyCaught: PokemonDetailUiState
+    data class PokemonAlreadyCaught(val pokemonName: String): PokemonDetailUiState
     data class SuccessCatchPokemon(val pokemonName: String): PokemonDetailUiState
     object FailedCatchPokemon: PokemonDetailUiState
     object PokemonReleased: PokemonDetailUiState
-    object SuccessRenamePokemon: PokemonDetailUiState
+    data class SuccessRenamePokemon(val pokemonName: String): PokemonDetailUiState
 }

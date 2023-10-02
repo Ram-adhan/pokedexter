@@ -16,6 +16,8 @@ import com.inbedroom.pokedexter.utils.LoadingHandler
 import com.inbedroom.pokedexter.utils.LoadingHandlerImpl
 import com.inbedroom.pokedexter.utils.adapter.pokemonlist.PokemonListAdapter
 import com.inbedroom.pokedexter.utils.adapter.pokemonlist.PokemonModel
+import com.inbedroom.pokedexter.utils.ui.DialogOptionInterface
+import com.inbedroom.pokedexter.utils.ui.dialogEditOption
 import kotlinx.coroutines.launch
 
 class PokemonStorageActivity: AppCompatActivity(), LoadingHandler by LoadingHandlerImpl() {
@@ -47,13 +49,12 @@ class PokemonStorageActivity: AppCompatActivity(), LoadingHandler by LoadingHand
                 .collect { state -> stateHandler(state) }
         }
 
-        viewModel.getCaughtPokemon("")
-
         binding.etSearch.doAfterTextChanged {
             viewModel.getCaughtPokemon(it.toString())
         }
 
         adapter.onItemClickListener = this::onPokemonItemClick
+        adapter.onEditClickListener = this::onEditPokemon
 
         binding.toggleChange.isVisible = false
     }
@@ -67,6 +68,23 @@ class PokemonStorageActivity: AppCompatActivity(), LoadingHandler by LoadingHand
         )
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getCaughtPokemon("")
+    }
+
+    private fun onEditPokemon(pokemonModel: PokemonModel) {
+        dialogEditOption(object : DialogOptionInterface {
+            override fun onPositive() {
+                viewModel.renamePokemon(pokemonModel)
+            }
+
+            override fun onNegative() {
+                viewModel.releasePokemon(pokemonModel)
+            }
+        }).show()
+    }
+
     private fun stateHandler(state: PokemonListUiState) {
         setProgressVisibility(state is PokemonListUiState.Loading)
         when (state) {
@@ -75,6 +93,17 @@ class PokemonStorageActivity: AppCompatActivity(), LoadingHandler by LoadingHand
             }
             is PokemonListUiState.ErrorGetPokemonList -> {
                 Toast.makeText(this, "error code -> ${state.code}", Toast.LENGTH_SHORT).show()
+            }
+            is PokemonListUiState.SuccessReleasePokemon -> {
+                Toast.makeText(this, "${state.name} is Released", Toast.LENGTH_SHORT).show()
+                viewModel.getCaughtPokemon(binding.etSearch.text.toString())
+            }
+            is PokemonListUiState.Error -> {
+                Toast.makeText(this, state.message, Toast.LENGTH_SHORT).show()
+            }
+            is PokemonListUiState.SuccessRenamePokemon -> {
+                Toast.makeText(this, state.message, Toast.LENGTH_SHORT).show()
+                viewModel.getCaughtPokemon(binding.etSearch.text.toString())
             }
             else -> {}
         }

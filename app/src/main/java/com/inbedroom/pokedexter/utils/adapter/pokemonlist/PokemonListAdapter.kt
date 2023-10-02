@@ -20,7 +20,8 @@ import com.inbedroom.pokedexter.databinding.ItemPokemonGridBinding
 
 class PokemonListAdapter(
     private val layoutManager: GridLayoutManager? = null,
-    var onItemClickListener: ((item: PokemonModel) -> Unit)? = null
+    var onItemClickListener: ((item: PokemonModel) -> Unit)? = null,
+    var onEditClickListener: ((item: PokemonModel) -> Unit)? = null,
 ) : ListAdapter<PokemonModel, PokemonListAdapter.ViewHolder>(ModelDiffUtil()) {
     companion object {
         private const val GRID_ITEM = 1
@@ -54,6 +55,7 @@ class PokemonListAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(item: PokemonModel) {
             binding.root.setOnClickListener(null)
+            binding.edit.setOnClickListener(null)
 
             Glide.with(binding.ivSprite)
                 .asBitmap()
@@ -102,6 +104,7 @@ class PokemonListAdapter(
             }
 
             binding.root.setOnClickListener { onItemClickListener?.invoke(item) }
+            binding.edit.setOnClickListener { onEditClickListener?.invoke(item) }
         }
     }
 
@@ -122,8 +125,10 @@ class PokemonListAdapter(
             }
             binding.tvName.text = name
             binding.tvPokedexEntry.text = "#" + item.id.toString().padStart(PokemonRepository.maxPad, '0')
+            binding.edit.isVisible = item.showEdit
 
             binding.root.setOnClickListener { onItemClickListener?.invoke(item) }
+            binding.edit.setOnClickListener { onEditClickListener?.invoke(item) }
         }
     }
 }

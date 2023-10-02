@@ -2,5 +2,7 @@
     <string name="app_name">Pokedexter</string>
     <string name="congratulations">Congratulation!!</string>
     <string name="you_caught_a_pokemon">You caught a %1$s\nYou can give it a name</string>
-
+    <string name="release">Release</string>
+    <string name="rename">Rename</string>
+    <string name="rename_pokemon_title">Who do you want to call %1$s?</string>
 </resources>

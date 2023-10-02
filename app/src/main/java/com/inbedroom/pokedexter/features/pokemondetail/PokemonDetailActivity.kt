@@ -104,6 +104,7 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
                             binding.tvPokemonName.text =
                                 state.data.name.replaceFirstChar { it.uppercase() }
 
+                            supportActionBar?.title = binding.tvPokemonName.text
                             binding.rvDexData.apply {
                                 adapter = PokedexDetailsAdapter(state.data.details.toMutableList())
                                 layoutManager = LinearLayoutManager(this@PokemonDetailActivity)
@@ -122,6 +123,7 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
                             }
                         }
                         is PokemonDetailUiState.PokemonAlreadyCaught -> {
+                            supportActionBar?.title = state.pokemonName
                             binding.ivPokeball.setImageDrawable(
                                 ContextCompat.getDrawable(
                                     this@PokemonDetailActivity,
@@ -138,12 +140,13 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
                                 )
                             )
                             addDialogSuccessCatch(pokemonName = state.pokemonName, object : DialogEditNameInterface {
-                                override fun onApply(newName: String) {
+                                override fun onApply(newName: String, pokemonId: Int) {
                                     viewModel.editPokemonName(newName)
                                 }
                             }).show()
                         }
                         is PokemonDetailUiState.SuccessRenamePokemon -> {
+                            supportActionBar?.title = state.pokemonName
                             Toast.makeText(
                                 this@PokemonDetailActivity,
                                 "Pokemon renamed",
@@ -152,6 +155,7 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
                                 .show()
                         }
                         is PokemonDetailUiState.PokemonReleased -> {
+                            supportActionBar?.title = binding.tvPokemonName.text
                             binding.ivPokeball.setImageDrawable(
                                 ContextCompat.getDrawable(
                                     this@PokemonDetailActivity,
