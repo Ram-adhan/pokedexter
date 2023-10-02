@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.inbedroom.pokedexter.databinding.ActivityListPokemonBinding
 import com.inbedroom.pokedexter.features.pokemondetail.PokemonDetailActivity
 import com.inbedroom.pokedexter.features.pokemonlist.PokemonListUiState
-import com.inbedroom.pokedexter.features.pokemonlist.PokemonListViewModel
 import com.inbedroom.pokedexter.utils.LoadingHandler
 import com.inbedroom.pokedexter.utils.LoadingHandlerImpl
 import com.inbedroom.pokedexter.utils.adapter.pokemonlist.PokemonListAdapter
@@ -26,7 +25,7 @@ class PokemonStorageActivity: AppCompatActivity(), LoadingHandler by LoadingHand
     private lateinit var binding: ActivityListPokemonBinding
     private lateinit var adapter: PokemonListAdapter
     private val layoutManager: GridLayoutManager by lazy { GridLayoutManager(this, SPAN_COUNT) }
-    private val viewModel: PokemonListViewModel by viewModels { PokemonListViewModel.Factory }
+    private val viewModel: PokemonStorageViewModel by viewModels { PokemonStorageViewModel.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
