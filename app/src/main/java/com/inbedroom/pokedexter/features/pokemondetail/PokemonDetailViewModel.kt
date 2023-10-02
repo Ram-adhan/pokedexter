@@ -86,7 +86,7 @@ class PokemonDetailViewModel(
                 )
                 pokemonDatabase.caughtPokemonDao().insert(data)
                 caughtPokemon = data
-                _uiState.emit(PokemonDetailUiState.SuccessCatchPokemon)
+                _uiState.emit(PokemonDetailUiState.SuccessCatchPokemon(data.pokemonName))
             }
         }
     }
@@ -168,6 +168,17 @@ class PokemonDetailViewModel(
             _uiState.emit(PokemonDetailUiState.PokemonAlreadyCaught)
         } else {
             caughtPokemon = null
+        }
+    }
+
+    fun editPokemonName(newName: String) {
+        viewModelScope.launch(ioDispatcher) {
+            caughtPokemon?.let {
+                pokemonDatabase.caughtPokemonDao().update(
+                    it.copy(givenName = newName)
+                )
+                _uiState.emit(PokemonDetailUiState.SuccessRenamePokemon)
+            }
         }
     }
 }

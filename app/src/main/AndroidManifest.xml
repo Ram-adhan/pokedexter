@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Pokedexter"
         tools:targetApi="31">
         <activity
+            android:name=".features.pokemonlist.pokemonstorage.PokemonStorageActivity"
+            android:exported="false" />
+        <activity
             android:name=".features.splash.SplashActivity"
             android:exported="true" >
             <intent-filter>

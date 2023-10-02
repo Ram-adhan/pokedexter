@@ -10,6 +10,7 @@ sealed interface PokemonDetailUiState {
     data class SuccessGetEvolutionChain(val data: List<EvolutionData>): PokemonDetailUiState
     object NoEvolutionChain: PokemonDetailUiState
     object PokemonAlreadyCaught: PokemonDetailUiState
-    object SuccessCatchPokemon: PokemonDetailUiState
+    data class SuccessCatchPokemon(val pokemonName: String): PokemonDetailUiState
     object PokemonReleased: PokemonDetailUiState
+    object SuccessRenamePokemon: PokemonDetailUiState
 }

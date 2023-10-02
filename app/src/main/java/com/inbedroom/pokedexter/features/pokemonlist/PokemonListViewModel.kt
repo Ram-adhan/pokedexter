@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.inbedroom.pokedexter.BaseApplication
+import com.inbedroom.pokedexter.core.DatabaseClient
+import com.inbedroom.pokedexter.core.PokemonDatabase
 import com.inbedroom.pokedexter.core.ResponseResult
 import com.inbedroom.pokedexter.data.pokemonservice.PokemonRepository
 import com.inbedroom.pokedexter.utils.adapter.pokemonlist.PokemonModel
@@ -20,6 +22,7 @@ import kotlinx.coroutines.launch
 
 class PokemonListViewModel(
     private val pokemonRepository: PokemonRepository,
+    private val pokemonDatabase: PokemonDatabase,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ViewModel() {
     companion object {
@@ -27,7 +30,7 @@ class PokemonListViewModel(
             initializer {
                 val repository =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as BaseApplication).repositoryModule
-                PokemonListViewModel(repository)
+                PokemonListViewModel(repository, DatabaseClient.getDB())
             }
         }
     }
@@ -61,6 +64,20 @@ class PokemonListViewModel(
                     _uiState.emit(PokemonListUiState.ErrorGetPokemonList(result.code))
                 }
             }
+        }
+    }
+
+    fun getCaughtPokemon(searchKeyWord: String) {
+        viewModelScope.launch(ioDispatcher) {
+            val result = pokemonDatabase.caughtPokemonDao().getAllCaughtPokemon().map {
+                PokemonModel(
+                    name = it.pokemonName,
+                    id = it.id,
+                    sprite = PokemonRepository.getDefaultSpriteLink(it.id),
+                    nickname = it.givenName.ifBlank { it.pokemonName }
+                )
+            }
+            _uiState.emit(PokemonListUiState.SuccessGetPokemonList(result))
         }
     }
 }

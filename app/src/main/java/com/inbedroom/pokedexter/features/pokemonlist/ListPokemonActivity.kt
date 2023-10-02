@@ -1,16 +1,23 @@
 package com.inbedroom.pokedexter.features.pokemonlist
 
 import android.animation.ValueAnimator
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.inbedroom.pokedexter.R
 import com.inbedroom.pokedexter.databinding.ActivityListPokemonBinding
 import com.inbedroom.pokedexter.features.pokemondetail.PokemonDetailActivity
+import com.inbedroom.pokedexter.features.pokemonlist.pokemonstorage.PokemonStorageActivity
 import com.inbedroom.pokedexter.utils.LoadingHandler
 import com.inbedroom.pokedexter.utils.LoadingHandlerImpl
 import com.inbedroom.pokedexter.utils.adapter.pokemonlist.PokemonListAdapter
@@ -52,6 +59,8 @@ class ListPokemonActivity : AppCompatActivity(), LoadingHandler by LoadingHandle
 
         adapter.onItemClickListener = this::onPokemonItemClick
 
+        addMenuProvider(menuProvider)
+
         binding.toggleChange.setOnClickListener {
             if (layoutManager.spanCount == 3) {
                 val animator = ValueAnimator.ofFloat(0.3f, 0.5f)
@@ -70,6 +79,26 @@ class ListPokemonActivity : AppCompatActivity(), LoadingHandler by LoadingHandle
         }
     }
 
+    private val menuProvider = object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.main_menu, menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            return when (menuItem.itemId) {
+                R.id.viewPokemonStorage -> {
+                    startActivity(
+                        Intent(
+                            this@ListPokemonActivity,
+                            PokemonStorageActivity::class.java
+                        )
+                    )
+                    true
+                }
+                else -> false
+            }
+        }
+    }
     private fun startToggleAnimation(animator: ValueAnimator) {
         animator.addUpdateListener {
             binding.toggleChange.progress = it.animatedValue as Float

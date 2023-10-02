@@ -24,6 +24,8 @@ import com.inbedroom.pokedexter.utils.LoadingHandler
 import com.inbedroom.pokedexter.utils.LoadingHandlerImpl
 import com.inbedroom.pokedexter.utils.adapter.dexdetail.PokedexDetailsAdapter
 import com.inbedroom.pokedexter.utils.adapter.evolution.EvolutionAdapter
+import com.inbedroom.pokedexter.utils.ui.DialogEditNameInterface
+import com.inbedroom.pokedexter.utils.ui.addDialogSuccessCatch
 import kotlinx.coroutines.launch
 
 class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHandlerImpl() {
@@ -135,6 +137,19 @@ class PokemonDetailActivity : AppCompatActivity(), LoadingHandler by LoadingHand
                                     R.drawable.colored_pokeball
                                 )
                             )
+                            addDialogSuccessCatch(pokemonName = state.pokemonName, object : DialogEditNameInterface {
+                                override fun onApply(newName: String) {
+                                    viewModel.editPokemonName(newName)
+                                }
+                            }).show()
+                        }
+                        is PokemonDetailUiState.SuccessRenamePokemon -> {
+                            Toast.makeText(
+                                this@PokemonDetailActivity,
+                                "Pokemon renamed",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
                         }
                         is PokemonDetailUiState.PokemonReleased -> {
                             binding.ivPokeball.setImageDrawable(

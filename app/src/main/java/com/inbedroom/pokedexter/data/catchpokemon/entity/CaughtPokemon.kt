@@ -9,4 +9,5 @@ data class CaughtPokemon(
     val pokemonName: String,
     val givenName: String,
     val renameCount: Int = 0,
+    val prefix: String = ""
 )

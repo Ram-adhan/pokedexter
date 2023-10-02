@@ -1,9 +1,6 @@
 package com.inbedroom.pokedexter.core
 
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.inbedroom.pokedexter.BuildConfig
-import com.inbedroom.pokedexter.data.pokemonservice.PokemonRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -13,11 +10,12 @@ import java.util.concurrent.TimeUnit
 
 class NetworkClient {
     companion object {
-        private const val BASE_URL = "https://pokeapi.co/api/v2/"
+        const val POKEMON_BASE_URL = "https://pokeapi.co/api/v2/"
+        const val CATCH_BASE_URL = "https://simple-pokemon-helper-f3cd2ee38ad7.herokuapp.com/"
 
         fun provideRetrofit(): Retrofit {
             return Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(POKEMON_BASE_URL)
                 .client(createClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
